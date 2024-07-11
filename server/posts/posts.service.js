@@ -1,7 +1,7 @@
 const axios = require('axios').default;
 
 /**
- * Fetches posts from a remote API.
+ * Fetches posts from a remote API with pagination support.
  * @async
  * @param {Object} [params] - The parameters for fetching posts.
  * @param {number} [params.start=0] - The start index of posts to fetch.
@@ -10,6 +10,7 @@ const axios = require('axios').default;
  */
 async function fetchPosts(params) {
   const { start = 0, limit = 10 } = params || {};
+  console.log(`Fetching posts from API with start: ${start} and limit: ${limit}`);
   const { data: posts } = await axios.get(
     'https://jsonplaceholder.typicode.com/posts',
     {
@@ -20,21 +21,9 @@ async function fetchPosts(params) {
     },
   );
 
+  console.log(`Fetched ${posts.length} posts`);
+
   return posts;
 }
 
-/**
- * Fetches images for a specific album.
- * @async
- * @param {number} albumId - The ID of the album to fetch images for.
- * @returns {Promise<Array>} - A promise that resolves to an array of images.
- */
-async function fetchImagesForPost(albumId) {
-  const { data: photos } = await axios.get(
-    `https://jsonplaceholder.typicode.com/albums/${albumId}/photos`
-  );
-
-  return photos.map(photo => ({ url: photo.url }));
-}
-
-module.exports = { fetchPosts, fetchImagesForPost };
+module.exports = { fetchPosts };
